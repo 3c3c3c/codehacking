@@ -3,6 +3,8 @@
 namespace App;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use App\Photo;
+use App\Role;
 
 class User extends Authenticatable
 {
@@ -29,5 +31,9 @@ class User extends Authenticatable
         return $this->belongsTo('App\Role');
     }
 
+    //a user can have (optional) a photo assigned to them
+    public function photo() {
+        return $this->belongsTo('App\Photo');
+    }
 
 }
