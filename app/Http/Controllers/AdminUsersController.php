@@ -6,6 +6,12 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 
+use App\User;
+
+use App\Role;
+
+use App\Http\Requests\UsersRequest;
+
 class AdminUsersController extends Controller
 {
     /**
@@ -15,7 +21,8 @@ class AdminUsersController extends Controller
      */
     public function index()
     {
-        return view('admin.users.index');
+        $users = User::all();
+        return view('admin.users.index', compact('users'));
     }
 
     /**
@@ -25,7 +32,9 @@ class AdminUsersController extends Controller
      */
     public function create()
     {
-        return view('admin.users.create');
+        $roles =  Role::lists('name', 'id')->all(); //note the order to suit our needs for select ie. name then id
+        //return $roles;
+        return view('admin.users.create', compact('roles'));
     }
 
     /**
@@ -34,9 +43,11 @@ class AdminUsersController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(UsersRequest $request)
     {
-        //
+        //return $request->all(); //used temporarily to quickly check what is being posted from create form
+        User::create($request->all());  //actually saves to database
+        return redirect('/admin/users'); //returns to users index to list all users
     }
 
     /**
