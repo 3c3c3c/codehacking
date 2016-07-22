@@ -36,4 +36,13 @@ class User extends Authenticatable
         return $this->belongsTo('App\Photo');
     }
 
+    public function isAdmin(){
+        //to enter admin functions user must be logged in and administrator role and have active set 
+        if($this->role->name == "administrator" && $this->is_active == 1) { //note the 'role' is the role() method in this class being used as property
+             return true;
+        }
+
+        return false;
+    }
+
 }

@@ -19,7 +19,11 @@ Route::auth();
 
 Route::get('/home', 'HomeController@index');
 
-Route::resource('admin/users', 'AdminUsersController');
+//grouping of routes available to admin only
+Route::group(['middleware'=>'admin'], function() {   //admin middle ware was created in middleware and registered in kernel
+	Route::resource('admin/users', 'AdminUsersController');
+	Route::resource('admin/posts', 'AdminPostsController');
+});
 
 Route::get('/admin', function(){
 	return view('admin.index');
