@@ -14,6 +14,8 @@ use App\Http\Requests\UsersRequest;
 
 use App\Photo;
 
+use App\Http\Requests\UsersEditRequest;
+
 class AdminUsersController extends Controller
 {
     /**
@@ -45,14 +47,21 @@ class AdminUsersController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(UsersRequest $request)
+    public function store(UsersRequest $request)  //note the custom 'UsersRequest' replaces the default 'Request'
     {
         //return $request->all(); //used temporarily to quickly check what is being posted from create form
        // User::create($request->all());  //quick test of save to database without photo
-        $input = $request->all(); //get everything posted from the form
+        //$input = $request->all(); //get everything posted from the form
         // if($request->file('photo_id')) {  //if there is a photo
         //     return 'Photo exists';        //quick print out if photo found nothing if not
         // }
+
+        if(trim($request->password) == '') {   //if no password passed means do not update password ie. ignore it
+            $input = $request->except('password');
+        } else {                               //yes password passed so update it
+            $input = $request->all();
+            $input['password'] = bcrypt($request->password);  //encrypt the password that came in from form
+        }
 
         if($file = $request->file('photo_id')) {                 //check there is a photo file
             $name = time() .$file->getClientOriginalName();      //append time to its name
@@ -61,7 +70,6 @@ class AdminUsersController extends Controller
             $input['photo_id'] = $photo->id; //also add the newly created photo id to the required form input field    
         }
 
-        $input['password'] = bcrypt($request->password);  //encrypt the password that came in from form
         User::create($input);  //save form input to database with photo if there and password encryption
 
         return redirect('/admin/users'); //returns to users index to list all users
@@ -86,7 +94,9 @@ class AdminUsersController extends Controller
      */
     public function edit($id)
     {
-        return view('admin.users.edit');
+        $user = User::findOrFail($id); //get the user with the passed in user id
+        $roles = Role::lists('name', 'id')->all();  //get the roles from the roles table to populate the role selection
+        return view('admin.users.edit', compact('user', 'roles'));
     }
 
     /**
@@ -96,9 +106,29 @@ class AdminUsersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
-    {
-        //
+    public function update(UsersEditRequest $request, $id)  //note the custom 'UsersRequest' replaces the default 'Request'
+    { 
+        
+        $user = User::findOrFail($id); //grab the user by the supplied id
+        //$input = $request->all(); //get the data posted over
+        if(trim($request->password) == '') {   //if no password passed means do not update password ie. ignore it
+            $input = $request->except('password'); //get data posted over without password field
+        } else {                               //yes password passed so update it
+            $input = $request->all();           //get data posted over with password field
+            $input['password'] = bcrypt($request->password);  //encrypt the password that came in from form
+        }
+
+        if($file = $request->file('photo_id')) {              //check there is a photo selected
+            echo $file;
+            $name =  time() .$file->getClientOriginalName();  //add a current time in seconds to its name
+            $file->move('images', $name);                     // take the newly named photo and put it in the public images folder
+            $photo = Photo::create(['file'=>$name]);          //add a new photo to the photo table of same name as the new photo
+            $input['photo_id'] = $photo->id;                  //update the form posted inputs with the new photo name
+        }
+
+        $user->update($input);  //do a database update on the required user
+
+        return redirect('/admin/users');  //redirect back to list of users
     }
 
     /**
