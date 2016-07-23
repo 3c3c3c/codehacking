@@ -18,6 +18,8 @@ use App\Http\Requests\UsersEditRequest;
 
 use Illuminate\Support\Facades\Session;
 
+use App\Http\Controllers\Auth;
+
 class AdminUsersController extends Controller
 {
     /**

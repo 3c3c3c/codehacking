@@ -5,6 +5,7 @@ namespace App;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use App\Photo;
 use App\Role;
+use App\Posts;
 
 class User extends Authenticatable
 {
@@ -34,6 +35,11 @@ class User extends Authenticatable
     //a user can have (optional) a photo assigned to them
     public function photo() {
         return $this->belongsTo('App\Photo');
+    }
+
+    //a user can have many posts see also the corresponding in posts  where a post belongs to a user
+    public function posts(){
+        return $this->hasMany('App\Posts');
     }
 
     public function isAdmin(){
