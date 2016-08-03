@@ -23,6 +23,7 @@ Route::get('/home', 'HomeController@index');
 Route::group(['middleware'=>'admin'], function() {   //admin middle ware was created in middleware and registered in kernel
 	Route::resource('admin/users', 'AdminUsersController');
 	Route::resource('admin/posts', 'AdminPostsController');
+	Route::resource('admin/categories', 'AdminCategoriesController');
 });
 
 Route::get('/admin', function(){

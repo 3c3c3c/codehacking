@@ -3,7 +3,7 @@
 @section('content')
 	<h1>Edit User</h1>
 
-	<!-- inclues a small partil view from the views includes folder (a reusable template code)-->
+	<!-- includes a small partil view from the views includes folder (a reusable template code)-->
 	<div class="row" >
 		@include('includes.formInputValidation') 
 	</div>
@@ -46,7 +46,7 @@
 				{!! Form::file('photo_id', null, ['class'=>'form-control']) !!}
 			</div>
 			<div class="form-group">
-				{!! Form::submit('Update Post', ['class'=>'btn btn-primary col-sm-3']) !!}
+				{!! Form::submit('Update User', ['class'=>'btn btn-primary col-sm-3']) !!}
 			</div>
 
 

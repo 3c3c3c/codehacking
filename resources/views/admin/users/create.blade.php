@@ -32,7 +32,7 @@
 			{!! Form::file('photo_id', null, ['class'=>'form-control']) !!}
 		</div>
 		<div class="form-group">
-			{!! Form::submit('Create Post', ['class'=>'btn btn-primary']) !!}
+			{!! Form::submit('Create User', ['class'=>'btn btn-primary']) !!}
 		</div>
 
 
