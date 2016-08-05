@@ -15,9 +15,13 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::auth();
+
 
 Route::get('/home', 'HomeController@index');
+
+Route::get('/admin', function(){
+	return view('admin.index');
+});
 
 //grouping of routes available to admin only
 Route::group(['middleware'=>'admin'], function() {   //admin middle ware was created in middleware and registered in kernel
@@ -26,6 +30,5 @@ Route::group(['middleware'=>'admin'], function() {   //admin middle ware was cre
 	Route::resource('admin/categories', 'AdminCategoriesController');
 });
 
-Route::get('/admin', function(){
-	return view('admin.index');
-});
+Route::auth();
+
