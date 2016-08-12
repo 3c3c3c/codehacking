@@ -15,8 +15,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-
-
 Route::get('/home', 'HomeController@index');
 
 Route::get('/admin', function(){
@@ -28,6 +26,10 @@ Route::group(['middleware'=>'admin'], function() {   //admin middle ware was cre
 	Route::resource('admin/users', 'AdminUsersController');
 	Route::resource('admin/posts', 'AdminPostsController');
 	Route::resource('admin/categories', 'AdminCategoriesController');
+	Route::resource('admin/media', 'AdminMediasController');
+
+	//if one wanted to have a route to an upload file 
+	//Route::get('admin.media.upload', ['as'=>'admin.media.upload', 'uses'=>'AdminMediasController@store']);
 });
 
 Route::auth();
