@@ -8,6 +8,8 @@ use App\Http\Requests;
 
 use App\Photo;
 
+use Illuminate\Support\Facades\Session;
+
 class AdminMediasController extends Controller
 {
     public function index() {
@@ -29,6 +31,16 @@ class AdminMediasController extends Controller
 
     public function create() {
     	return view('admin.media.create');
+    }
+
+    public function destroy($id) {
+        //return 'The id of the picture to delete is ' .$id; //quick test
+
+        $photo = Photo::findOrFail($id);
+        unlink(public_path() .$photo->file);
+        $photo->delete();
+        Session::flash('deleted_photo', 'Photo image deleted successfully');
+        return redirect('admin/media');
     }
 
 }

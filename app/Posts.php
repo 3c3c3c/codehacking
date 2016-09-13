@@ -4,9 +4,12 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use App\User;
+use \Cviebrock\EloquentSluggable\Services\SlugService;
 
-class Posts extends Model
+class Posts extends Model 
 {
+    
+    protected $sluggable = [ 'build_from' => 'title', 'save_to' => 'slug', 'on_update' => true ];
     protected $fillable = [
     	'user_id',
     	'category_id',
@@ -27,6 +30,11 @@ class Posts extends Model
 
     public function category() {
     	return $this->belongsTo('App\Category');
+    }
+
+    //a post has many comments
+    public function comments() {
+        return $this->hasMany('App\Comment', 'post_id');
     }
 
 
